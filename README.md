@@ -1,0 +1,1 @@
+This is a Phalcon application for recording time and managing projects
