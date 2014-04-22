@@ -1,0 +1,55 @@
+<?php use Phalcon\Tag;
+
+echo $this->getContent();
+$lasttime = 0;
+foreach ($weeks as $week => $days) { ?>
+<div class="panel panel-default">
+
+    <div class="panel-heading"><?php echo $week; ?></div>
+
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>User</th>
+            <th>Tempnote</th>
+            <th>Project</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        foreach($days as $day => $times) {
+        for ($i = 0; $i < count($times); $i++) {
+            $time = $times[$i];
+            $start = strtotime($time->getStart());
+            $end = strtotime($time->getStart());
+
+            if(date('z', $start) % 2 == 1)
+                $colour = '#f5f5f5';
+            else
+                $colour = '#ffffff';
+            /*
+            $diff = $start-$lasttime;
+            if($diff > 60 && $diff < 3600*8)
+                echo "<tr style='background-color: $colour;'><td colspan='8'><strong>".round($diff/3600, 1)."h gap</strong></td></tr>";
+
+            $lasttime = $end; */
+            ?>
+            <tr style="background-color: <?php echo $colour ?>;">
+                <?php if($i==0) echo "<td style='vertical-align: middle;' rowspan='".count($times)."'>".substr($time->getStart(), 0, 10)."</td>"; ?>
+                <td style="vertical-align: "><?php echo substr($time->getStart(), 11, 5) ?></td>
+                <td><?php echo substr($time->getEnd(), 11, 5) ?></td>
+                <td><?php echo $time->getUserId() ?></td>
+                <td><?php echo $time->getTempnote() ?></td>
+                <td><?php echo $time->getProjectId() ?></td>
+                <td><?php echo $this->tag->linkTo(array("times/edit/" . $time->getId(), "Edit")); ?></td>
+                <td><?php echo $this->tag->linkTo(array("times/delete/" . $time->getId(), "Delete")); ?></td>
+            </tr>
+        <?php } } ?>
+        </tbody>
+    </table>
+</div>
+<?php } ?>

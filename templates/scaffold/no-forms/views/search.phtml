@@ -1,0 +1,47 @@
+<?php use Phalcon\Tag; ?>
+
+<?php echo $this->getContent(); ?>
+
+<table width="100%">
+    <tr>
+        <td align="left">
+            <?php echo $this->tag->linkTo(array("$plural$/index", "Go Back")); ?>
+        </td>
+        <td align="right">
+            <?php echo $this->tag->linkTo(array("$plural$/new", "Create ")); ?>
+        </td>
+    <tr>
+</table>
+
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">$plural$</div>
+    <div class="panel-body">
+        <p>A table of $plural$</p>
+    </div>
+
+    <!-- Table -->
+    <table class="table">
+
+        <thead>
+            <tr>
+            $headerColumns$         </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($page->items as $singularVar$) { ?>
+                <tr>
+                    $rowColumns$            <td><?php echo $this->tag->linkTo(array("$plural$/edit/" . $singularVar$->$pk$, "Edit")); ?></td>
+                    <td><?php echo $this->tag->linkTo(array("$plural$/delete/" . $singularVar$->$pk$, "Delete")); ?></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+
+<ul class="pagination">
+    <li><?php echo $this->tag->linkTo("$plural$/search", "First") ?></li>
+    <li><?php echo $this->tag->linkTo("$plural$/search?page=" . $page->before, "Previous") ?></li>
+    <li><?php echo $this->tag->linkTo("$plural$/search?page=" . $page->next, "Next") ?></li>
+    <li><?php echo $this->tag->linkTo("$plural$/search?page=" . $page->last, "Last") ?></li>
+    <li><a><?php echo $page->current, "/", $page->total_pages ?></a></li>
+</ul>

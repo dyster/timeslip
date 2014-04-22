@@ -1,0 +1,57 @@
+
+<?php echo $this->tag->form("projects/create") ?>
+
+<table width="100%">
+    <tr>
+        <td align="left"><?php echo $this->tag->linkTo(array("projects", "Go Back")) ?></td>
+        <td align="right"><?php echo $this->tag->submitButton("Save") ?></td>
+    <tr>
+</table>
+
+<?php echo $this->getContent(); ?>
+
+<div align="center">
+    <h1>Create projects</h1>
+</div>
+
+<table>
+    <tr>
+        <td align="right">
+            <label for="name">Name</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("name", "size" => 30)) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="touch">Touch</label>
+        </td>
+        <td align="left">
+                <?php echo $this->tag->textField(array("touch", "type" => "date")) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="user_id">User</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("user_id", "type" => "number")) ?>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">
+            <label for="customer_id">Customer</label>
+        </td>
+        <td align="left">
+            <?php echo $this->tag->textField(array("customer_id", "type" => "number")) ?>
+        </td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td><?php echo $this->tag->submitButton("Search") ?></td>
+    </tr>
+</table>
+
+</form>
