@@ -9,6 +9,7 @@ use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Events\Manager;
 
+
 /**
  * The FactoryDefault Dependency Injector automatically register the right services providing a full stack framework
  */
@@ -104,6 +105,13 @@ $di->set('session', function () {
  */
 $di->set('elements', function () {
     return new Elements();
+});
+
+/**
+ * Custom authentication component
+ */
+$di->set('auth', function () {
+    return new Auth();
 });
 
 /**

@@ -7,25 +7,25 @@ class Users extends \Phalcon\Mvc\Model
      *
      * @var integer
      */
-    protected $id;
+    public $id;
 
     /**
      *
      * @var string
      */
-    protected $name;
+    public $name;
 
     /**
      *
      * @var string
      */
-    protected $username;
+    public $email;
 
     /**
      *
      * @var string
      */
-    protected $password;
+    public $password;
 
     /**
      * Method to set the value of field name
@@ -46,9 +46,9 @@ class Users extends \Phalcon\Mvc\Model
      * @param  string $username
      * @return $this
      */
-    public function setUsername($username)
+    public function setEmail($username)
     {
-        $this->username = $username;
+        $this->email = $username;
 
         return $this;
     }
@@ -91,9 +91,9 @@ class Users extends \Phalcon\Mvc\Model
      *
      * @return string
      */
-    public function getUsername()
+    public function getEmail()
     {
-        return $this->username;
+        return $this->email;
     }
 
     /**
