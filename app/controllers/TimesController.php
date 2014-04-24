@@ -13,6 +13,8 @@ class TimesController extends ControllerBase
     {
         $this->persistent->parameters = null;
 
+        $identity = $this->auth->getIdentity();
+
         if($this->request->isPost()) {
             $halftime = Times::findFirst('end IS NULL');
 
@@ -28,7 +30,7 @@ class TimesController extends ControllerBase
             if($this->request->getPost("action") == 'start') {
                 $time = new Times();
                 $time->setStart(date(DATE_ATOM));
-
+                $time->setUserId($identity['id']);
                 $time->setTempnote($this->request->getPost("tempnote"));
                 if (!$time->save()) {
                     foreach ($time->getMessages() as $message) {
