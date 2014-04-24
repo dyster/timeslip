@@ -1,5 +1,4 @@
 <?php
-namespace Timeslip\Models;
 
 use Phalcon\Mvc\Model;
 
@@ -34,9 +33,14 @@ class SuccessLogins extends Model
      */
     public $userAgent;
 
+    /**
+     * @var string
+     */
+    public $token;
+
     public function initialize()
     {
-        $this->belongsTo('usersId', 'Timeslip\Models\Users', 'id', array(
+        $this->belongsTo('usersId', 'Users', 'id', array(
             'alias' => 'user'
         ));
     }

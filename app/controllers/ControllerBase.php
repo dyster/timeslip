@@ -8,5 +8,24 @@ class ControllerBase extends Controller
     public function beforeExecuteRoute(Dispatcher $dispatcher)
     {
 
+        $controller = $dispatcher->getControllerName();
+        $action = $dispatcher->getActionName();
+
+        if($controller == 'session')
+            return true;
+
+        $identity = $this->auth->getIdentity();
+
+        // If there is no identity available the user is redirected to index/index
+        if (!is_array($identity)) {
+
+            $this->flash->error('You must be logged in');
+
+            $dispatcher->forward(array(
+                'controller' => 'session',
+                'action' => 'login'
+            ));
+            return false;
+        }
     }
 }

@@ -10,7 +10,7 @@ class Auth extends Component
      *
      * @param array $credentials
      * @throws Exception
-     * @return boolan
+     * @return boolean
      */
     public function check($credentials)
     {
@@ -31,8 +31,11 @@ class Auth extends Component
         // Check if the user was flagged
         $this->checkUserFlags($user);
 
+        // Generate session token
+        $token = base64_encode(openssl_random_pseudo_bytes(30));
+
         // Register the successful login
-        $this->saveSuccessLogin($user);
+        $this->saveSuccessLogin($user, $token);
 
         // Check if the remember me was selected
         if (isset($credentials['remember'])) {
@@ -42,7 +45,7 @@ class Auth extends Component
         $this->session->set('auth-identity', array(
             'id' => $user->id,
             'name' => $user->name,
-            'profile' => $user->profile->name
+            'token' => $token
         ));
     }
 
@@ -50,14 +53,16 @@ class Auth extends Component
      * Creates the remember me environment settings the related cookies and generating tokens
      *
      * @param Users $user
+     * @param $token
      * @throws Exception
      */
-    public function saveSuccessLogin($user)
+    public function saveSuccessLogin($user, $token)
     {
         $successLogin = new SuccessLogins();
         $successLogin->usersId = $user->id;
         $successLogin->ipAddress = $this->request->getClientAddress();
         $successLogin->userAgent = $this->request->getUserAgent();
+        $successLogin->token = $token;
         if (!$successLogin->save()) {
             $messages = $successLogin->getMessages();
             throw new Exception($messages[0]);
@@ -174,7 +179,7 @@ class Auth extends Component
                         ));
 
                         // Register the successful login
-                        $this->saveSuccessLogin($user);
+                        $this->saveSuccessLogin($user, $token);
 
                         return $this->response->redirect('users');
                     }
@@ -191,7 +196,8 @@ class Auth extends Component
     /**
      * Checks if the user is banned/inactive/suspended
      *
-     * @param Timeslip\Models\Users $user
+     * @param Users|\Users $user
+     * @throws Exception
      */
     public function checkUserFlags(Users $user)
     {

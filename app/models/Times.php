@@ -1,5 +1,4 @@
 <?php
-namespace Timeslip\Models;
 
 class Times extends \Phalcon\Mvc\Model
 {

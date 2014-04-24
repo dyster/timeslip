@@ -38,7 +38,7 @@ class Elements extends Phalcon\Mvc\User\Component
             'Logout' => array(
                 'controller' => 'session',
                 'action' => 'logout'
-            ),
+            )
         )
     );
 
@@ -77,16 +77,12 @@ class Elements extends Phalcon\Mvc\User\Component
      */
     public function getMenu()
     {
+        $name = $this->auth->getName();
 
-        $auth = $this->session->get('auth');
-        if ($auth) {
-            $this->_headerMenu['pull-right']['session'] = array(
-                'caption' => 'Log Out',
-                'action' => 'end'
-            );
-        } else {
-            unset($this->_headerMenu['pull-left']['invoices']);
-        }
+        $this->_headerMenu['pull-right'][$name] = array(
+                'controller' => 'user',
+                'action' => 'profile'
+        );
 
         $controllerName = $this->view->getControllerName();
         $actionName = $this->view->getActionName();
@@ -107,7 +103,7 @@ class Elements extends Phalcon\Mvc\User\Component
                     <?php foreach ($this->_headerMenu as $position => $menu) {
                     echo '<ul class="nav navbar-nav ', $position, '">';
                         foreach ($menu as $caption => $option) {
-                        if ($controllerName == $option['controller']) {
+                        if ($controllerName == $option['controller'] && $actionName == $option['action']) {
                         echo '<li class="active">';
                             } else {
                             echo '<li>';
