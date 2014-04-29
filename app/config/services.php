@@ -55,19 +55,17 @@ $di->set('view', function () use ($config) {
 /**
  * Database connection is created based in the parameters defined in the configuration file
  */
-$di->set('db', function () use ($config) {
-    $eventsManager = new Manager();
+$di->set('db', function () use ($config, $di) {
+    $eventsManager = new \Phalcon\Events\Manager();
 
-    //Listen all the database events
-    $eventsManager->attach('db', function($event, $connection) {
+    $profiler = $di->getProfiler();
+
+    $eventsManager->attach('db', function($event, $connection) use ($profiler) {
         if ($event->getType() == 'beforeQuery') {
-            //$logger->log($connection->getSQLStatement(), Logger::INFO);
-            //$_SESSION['sqllog'][] = $connection->getSQLStatement();
-            $bag = new \Phalcon\Session\Bag('sqllog');
-            $log = $bag->log;
-            $log[] = $connection->getSQLStatement();
-            $bag->log = $log;
-
+            $profiler->startProfile($connection->getSQLStatement());
+        }
+        if ($event->getType() == 'afterQuery') {
+            $profiler->stopProfile();
         }
     });
 
@@ -125,3 +123,7 @@ $di->set('flash', function(){
         'notice' => 'alert alert-info',
     ));
 });
+
+$di->set('profiler', function(){
+    return new \Phalcon\Db\Profiler();
+}, true);

@@ -26,21 +26,19 @@
 
 <?php echo $this->getContent() ?>
 
-<?php if(isset($_SESSION['sqllog'])) { ?>
+<?php $profiles = $this->getDI()->get('profiler')->getProfiles(); ?>
 <div class="container">
     <div class="panel panel-default">
         <ul class="list-group">
-            <?php foreach ($_SESSION['sqllog']['log'] as $sql) { ?>
-                <li class="list-group-item"><?php echo $sql; ?></li>
-            <?php } ?>
+        <?php foreach ($profiles as $profile) { ?>
+            <li class="list-group-item">
+                <?php echo $profile->getSQLStatement(); ?>
+                <span class="badge"><?php echo round($profile->getTotalElapsedSeconds(), 2); ?></span>
+            </li>
+        <?php } ?>
         </ul>
-
     </div>
 </div>
-<?php } unset($_SESSION['sqllog']);?>
-
-
-
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
