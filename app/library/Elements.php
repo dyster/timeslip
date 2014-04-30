@@ -11,7 +11,7 @@ class Elements extends Phalcon\Mvc\User\Component
         'pull-left' => array(
             'Add Time' => array(
                 'controller' => 'times',
-                'action' => 'add'
+                'action' => 'create'
             ),
             'Summary' => array(
                 'controller' => 'times',

@@ -120,14 +120,6 @@ class TimesController extends ControllerBase
     }
 
     /**
-     * Displayes the creation form
-     */
-    public function newAction()
-    {
-
-    }
-
-    /**
      * Edits a time
      *
      * @param string $id
@@ -164,41 +156,30 @@ class TimesController extends ControllerBase
      */
     public function createAction()
     {
+        $form = new CreateTimeForm();
 
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "times",
-                "action" => "index"
-            ));
-        }
+        if ($this->request->isPost()) {
+            $time = new Times();
 
-        $time = new Times();
+            $time->setStart($this->request->getPost("start"));
+            $time->setEnd($this->request->getPost("end"));
+            $time->setUserId($this->request->getPost("user_id"));
+            $time->setTempnote($this->request->getPost("tempnote"));
+            $time->setProjectId($this->request->getPost("project_id"));
 
-        $time->setStart($this->request->getPost("start"));
-        $time->setEnd($this->request->getPost("end"));
-        $time->setUserId($this->request->getPost("user_id"));
-        $time->setTempnote($this->request->getPost("tempnote"));
-        $time->setProjectId($this->request->getPost("project_id"));
-        
-
-        if (!$time->save()) {
-            foreach ($time->getMessages() as $message) {
-                $this->flash->error($message);
+            if (!$time->save()) {
+                foreach ($time->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
             }
+            else
+                $this->flash->success("time was created successfully");
 
-            return $this->dispatcher->forward(array(
-                "controller" => "times",
-                "action" => "new"
-            ));
+
         }
 
-        $this->flash->success("time was created successfully");
 
-        return $this->dispatcher->forward(array(
-            "controller" => "times",
-            "action" => "index"
-        ));
-
+        $this->view->form = $form;
     }
 
     /**
