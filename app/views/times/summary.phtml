@@ -1,0 +1,19 @@
+<?php echo $this->getContent(); ?>
+
+<?php foreach($output as $year => $weeks) { ?>
+<div class="container-fluid">
+    <h2><?php echo $year; ?></h2>
+        <?php foreach($weeks as $week => $arr) { ?>
+            <div class="panel panel-default">
+                <div class="panel-heading"><?php echo "Week " . $week . " - " . round($arr['total']/3600) . " h"; ?></div>
+                <div class="panel-body">
+                    <ul>
+                        <?php foreach($arr['sums'] as $name => $sum) { ?>
+                            <li><strong><?php echo round($sum/3600,1); ?> h</strong> - <?php echo $name; ?></li>
+                        <?php } ?>
+                    </ul>
+                </div>
+            </div>
+        <?php } ?>
+</div>
+<?php } ?>

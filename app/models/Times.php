@@ -165,6 +165,17 @@ class Times extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Returns the duration in seconds
+     *
+     * @return int
+     */
+    public function getDuration()
+    {
+        $diff = strtotime($this->end) - strtotime($this->start);
+        return $diff;
+    }
+
+    /**
      * Initialize method for model.
      */
     public function initialize()

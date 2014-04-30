@@ -59,12 +59,13 @@ class TimesController extends ControllerBase
         $param = $this->dispatcher->getParam(0);
         if(empty($param)) {
             $times = Times::find(array(
-                'order' => 'start'
+                'order' => 'start',
+                'user_id = '.$this->auth->getId()
             ));
         } else {
             $times = Times::find(array(
                 'order' => 'start',
-                "project_id = $param"
+                "project_id = $param AND user_id = ".$this->auth->getId()
             ));
         }
 
@@ -291,6 +292,33 @@ class TimesController extends ControllerBase
             "controller" => "times",
             "action" => "index"
         ));
+    }
+
+    public function summaryAction()
+    {
+        $id = $this->auth->getId();
+        $times = Times::find("user_id = $id");
+        $output = array();
+        foreach($times as $time) {
+            $week = date('W', strtotime($time->getStart()));
+            $year = date('Y', strtotime($time->getStart()));
+
+            if(empty($output[$year]))
+                $output[$year] = array();
+            if(empty($output[$year][$week]))
+                $output[$year][$week] = array('total' => 0, 'sums' => array());
+
+            $output[$year][$week]['total'] += $time->getDuration();
+
+            if(empty($output[$year][$week]['sums'][$time->getTempnote()]))
+                $output[$year][$week]['sums'][$time->getTempnote()] = $time->getDuration();
+            else
+                $output[$year][$week]['sums'][$time->getTempnote()] += $time->getDuration();
+
+            $output[$year][$week]['sums'][$time->getTempnote()] += $time->getDuration();
+        }
+
+        $this->view->output = $output;
     }
 
 }

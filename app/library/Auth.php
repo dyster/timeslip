@@ -225,6 +225,17 @@ class Auth extends Component
     }
 
     /**
+     * Returns the current user identity
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        $identity = $this->session->get('auth-identity');
+        return $identity['id'];
+    }
+
+    /**
      * Returns the current identity
      *
      * @return string
