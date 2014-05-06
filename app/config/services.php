@@ -62,7 +62,11 @@ $di->set('db', function () use ($config, $di) {
 
     $eventsManager->attach('db', function($event, $connection) use ($profiler) {
         if ($event->getType() == 'beforeQuery') {
-            $profiler->startProfile($connection->getSQLStatement());
+            $str = $connection->getRealSQLStatement();
+            $vars = $connection->getSQLVariables();
+            if(!empty($vars))
+                $str .= " <strong>VARS=</strong>".json_encode($connection->getSQLVariables());
+            $profiler->startProfile($str);
         }
         if ($event->getType() == 'afterQuery') {
             $profiler->stopProfile();
