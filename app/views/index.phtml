@@ -27,7 +27,8 @@
 <?php echo $this->getContent() ?>
 
 <?php
-$profiles = $this->getDI()->get('profiler')->getProfiles();
+$profiler = $this->getDI()->get('profiler');
+$profiles = $profiler->getProfiles();
 if($profiles != null) {
 ?>
 <div class="container">
@@ -36,9 +37,10 @@ if($profiles != null) {
         <?php foreach ($profiles as $profile) { ?>
             <li class="list-group-item">
                 <?php echo $profile->getSQLStatement(); ?>
-                <span class="badge"><?php echo round($profile->getTotalElapsedSeconds(), 2); ?></span>
+                <span class="badge"><?php echo round($profile->getTotalElapsedSeconds(), 3); ?></span>
             </li>
         <?php } ?>
+            <li class="list-group-item">Total: <?php echo $profiler->getNumberTotalStatements() . " in " . $profiler->getTotalElapsedSeconds(); ?></li>
         </ul>
     </div>
 </div>
