@@ -182,7 +182,7 @@ class Times extends \Phalcon\Mvc\Model
     {
         $this->belongsTo("user_id", "Users", "id", NULL);
         $this->belongsTo("user_id", "Projects", "id", NULL);
-        $this->skipAttributesOnCreate(array('end', 'project_id'));
+        //$this->skipAttributesOnCreate(array('end', 'project_id'));
     }
 
 }

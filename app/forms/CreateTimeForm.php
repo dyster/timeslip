@@ -17,32 +17,64 @@ class CreateTimeForm extends Form
     public function initialize()
     {
         $start = new Date('start', array(
-            'placeholder' => 'Start',
+            'placeholder' => 'Date',
             'class' => 'form-control'
         ));
 
+        $start->setLabel('Start Date');
+
         $start->addValidator(new PresenceOf(array(
-            'message' => 'Start is required'
+            'message' => 'Start-date is required'
         )));
 
         $this->add($start);
 
-
-        $end = new Date('end', array(
-            'placeholder' => 'End',
+        $starttime = new Text('starttime', array(
+            'placeholder' => 'Time',
             'class' => 'form-control'
         ));
 
+        $starttime->setLabel('Start Time');
+
+        $starttime->addValidator(new PresenceOf(array(
+            'message' => 'Start-time is required'
+        )));
+
+        $this->add($starttime);
+
+
+        $end = new Date('end', array(
+            'placeholder' => 'Date',
+            'class' => 'form-control'
+        ));
+
+        $end->setLabel('End Date');
+
         $end->addValidator(new PresenceOf(array(
-            'message' => 'End is required'
+            'message' => 'End-date is required'
         )));
 
         $this->add($end);
+
+        $endtime = new Text('endtime', array(
+            'placeholder' => 'Time',
+            'class' => 'form-control'
+        ));
+
+        $endtime->setLabel('End Time');
+
+        $endtime->addValidator(new PresenceOf(array(
+            'message' => 'End-time is required'
+        )));
+
+        $this->add($endtime);
 
         $tempnote = new Text('tempnote', array(
             'placeholder' => 'Note',
             'class' => 'form-control'
         ));
+
+        $tempnote->setLabel('Note');
 
         $tempnote->addValidator(new PresenceOf(array(
             'message' => 'Note is required'
@@ -50,8 +82,20 @@ class CreateTimeForm extends Form
 
         $this->add($tempnote);
 
+        $projectid = new \Phalcon\Forms\Element\Select('project_id', Projects::find('user_id IN('.$this->auth->getId().',0)'), array(
+            'using' => array(
+                'id', 'name'
+        )));
+        $projectid->setLabel('Project');
+        $projectid->setAttribute('placeholder', 'Placeholder?');
+        $projectid->setAttribute('class', 'form-control');
+        $projectid->addValidator(new PresenceOf(array('message' => 'Project is required')));
+        $this->add($projectid);
+
         // CSRF
         $csrf = new Hidden('csrf');
+
+        $csrf->setAttribute('value', $this->security->getSessionToken());
 
         $csrf->addValidator(new Identical(array(
             'value' => $this->security->getSessionToken(),

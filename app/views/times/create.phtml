@@ -3,10 +3,38 @@
 
 <?php echo $this->getContent(); ?>
 
-<?php echo $this->view->form->render('start'); ?>
-<?php echo $this->view->form->render('end'); ?>
-<?php echo $this->view->form->render('Add'); ?>
-<?php echo $this->view->form->render('csrf'); ?>
+<div class="row">
+    <div class="form-group col-sm-6">
+        <?php echo $this->view->form->label('start'); ?>
+        <?php echo $this->view->form->render('start'); ?>
+    </div>
 
+    <div class="form-group col-sm-6">
+        <?php echo $this->view->form->label('starttime'); ?>
+        <?php echo $this->view->form->render('starttime'); ?>
+    </div>
+</div>
+<div class="row">
+    <div class="form-group col-sm-6">
+        <?php echo $this->view->form->label('end'); ?>
+        <?php echo $this->view->form->render('end'); ?>
+    </div>
+    <div class="form-group col-sm-6">
+        <?php echo $this->view->form->label('endtime'); ?>
+        <?php echo $this->view->form->render('endtime'); ?>
+    </div>
+</div>
+<div class="form-group">
+    <?php echo $this->view->form->label('tempnote'); ?>
+    <?php echo $this->view->form->render('tempnote'); ?>
+</div>
+<div class="form-group">
+    <?php echo $this->view->form->label('project_id'); ?>
+    <?php echo $this->view->form->render('project_id'); ?>
+</div>
+<div class="form-group">
+    <?php echo $this->view->form->render('Add'); ?>
+    <?php echo $this->view->form->render('csrf'); ?>
+</div>
 
 </form>

@@ -32,6 +32,8 @@ class TimesController extends ControllerBase
                 $time->setStart(date(DATE_ATOM));
                 $time->setUserId($identity['id']);
                 $time->setTempnote($this->request->getPost("tempnote"));
+                $time->setEnd('0000-00-00 00:00:00');
+                $time->setProjectId(0);
                 if (!$time->save()) {
                     foreach ($time->getMessages() as $message) {
                         $this->flash->error($message);
@@ -159,27 +161,49 @@ class TimesController extends ControllerBase
         $form = new CreateTimeForm();
 
         if ($this->request->isPost()) {
-            $time = new Times();
 
-            $time->setStart($this->request->getPost("start"));
-            $time->setEnd($this->request->getPost("end"));
-            $time->setUserId($this->request->getPost("user_id"));
-            $time->setTempnote($this->request->getPost("tempnote"));
-            $time->setProjectId($this->request->getPost("project_id"));
-
-            if (!$time->save()) {
-                foreach ($time->getMessages() as $message) {
+            if ($form->isValid($this->request->getPost()) == false) {
+                foreach ($form->getMessages() as $message) {
                     $this->flash->error($message);
                 }
+            } else {
+                $time = new Times();
+
+                $start = new DateTime($this->request->getPost("start") . " " . self::fixTime($this->request->getPost("starttime")));
+                $end = new DateTime($this->request->getPost("end") . " " . self::fixTime($this->request->getPost("endtime")));
+                $form->get('starttime')->setDefault($start->format('H:m:s'));
+                $form->get('endtime')->setDefault($end->format('H:m:s'));
+                $time->setStart($start->format(DATE_ATOM));
+                $time->setEnd($end->format(DATE_ATOM));
+                $time->setUserId($this->auth->getId());
+                $time->setTempnote($this->request->getPost("tempnote"));
+                $time->setProjectId($this->request->getPost("project_id"));
+
+                if (!$time->save()) {
+                    foreach ($time->getMessages() as $message) {
+                        $this->flash->error($message);
+                    }
+                }
+                else
+                    $this->flash->success("time was created successfully");
             }
-            else
-                $this->flash->success("time was created successfully");
 
 
         }
 
 
         $this->view->form = $form;
+    }
+
+    private function fixTime($str)
+    {
+        switch(strlen($str)) {
+            case 2:
+                return $str . ":00:00";
+            case 4:
+                return $str[0].$str[1].':'.$str[2].$str[3].':00';
+        }
+        return $str;
     }
 
     /**
