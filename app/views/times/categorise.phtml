@@ -1,0 +1,32 @@
+<?php echo $this->getContent(); ?>
+
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>Start</th>
+            <th>End</th>
+
+            <th>Tempnote</th>
+            <th>Project</th>
+         </tr>
+    </thead>
+    <tbody>
+    <form method="post">
+    <?php foreach ($times as $time) { ?>
+        <tr>
+
+            <td><?php echo $time->getStart() ?></td>
+            <td><?php echo $time->getEnd() ?></td>
+
+            <td><?php echo $time->getTempnote() ?></td>
+            <td><?php echo $this->tag->selectStatic(array($time->getId(), $projects, 'class' => 'form-control')); ?></td>
+        </tr>
+    <?php } ?>
+        <tr>
+            <td><?php echo $this->tag->submitButton(array('Send', 'class' => 'btn btn-primary')); ?></td>
+        </tr>
+    </form>
+    </tbody>
+</table>

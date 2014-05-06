@@ -56,6 +56,32 @@ class TimesController extends ControllerBase
         $this->view->setVars(compact('recents', 'state', 'halftime'));
     }
 
+    public function categoriseAction()
+    {
+        if($this->request->isPost()) {
+            foreach($this->request->getPost() as $id => $pid) {
+                if($pid > 0) {
+                    $time = Times::findFirst($id);
+                    $time->setProjectId($pid);
+                    if (!$time->save()) {
+                        foreach ($time->getMessages() as $message) {
+                            $this->flash->error($message);
+                        }
+                    }
+                }
+            }
+        }
+
+        $projects = array(0 => 'Unknown');
+        foreach(Projects::find('user_id = '.$this->auth->getId()) as $project) {
+            $projects[$project->getId()] = $project->getName();
+        }
+        $this->view->projects = $projects;
+
+        $times = Times::find('user_id = ' . $this->auth->getId() . ' AND project_id = 0');
+        $this->view->times = $times;
+    }
+
     public function listifyAction()
     {
         $param = $this->dispatcher->getParam(0);
