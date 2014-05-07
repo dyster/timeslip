@@ -16,6 +16,7 @@ class ProjectsController extends ControllerBase
             $projects = Projects::find('user_id = '.$this->auth->getId());
         else
             $projects = Projects::find('user_id = '.$this->auth->getId()." AND customer_id = $param");
+        $output = array();
         foreach($projects as $project)
         {
             $arr = $project->toArray();
