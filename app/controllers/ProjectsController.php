@@ -11,7 +11,11 @@ class ProjectsController extends ControllerBase
      */
     public function indexAction()
     {
-        $projects = Projects::find('user_id = '.$this->auth->getId());
+        $param = $this->dispatcher->getParam(0);
+        if(empty($param))
+            $projects = Projects::find('user_id = '.$this->auth->getId());
+        else
+            $projects = Projects::find('user_id = '.$this->auth->getId()." AND customer_id = $param");
         foreach($projects as $project)
         {
             $arr = $project->toArray();

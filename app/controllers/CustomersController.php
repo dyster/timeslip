@@ -11,7 +11,7 @@ class CustomersController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->persistent->parameters = null;
+        $this->view->customers = Customers::find('user_id = '.$this->auth->getId());
     }
 
     /**
