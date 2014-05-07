@@ -3,7 +3,7 @@
 echo $this->getContent();
 $lasttime = 0;
 foreach ($weeks as $week => $days) { ?>
-<div class="panel panel-default">
+<div class="panel panel-primary">
 
     <div class="panel-heading"><?php echo $week; ?></div>
 
@@ -14,9 +14,10 @@ foreach ($weeks as $week => $days) { ?>
             <th>Date</th>
             <th>Start</th>
             <th>End</th>
-            <th>User</th>
-            <th>Tempnote</th>
+            <th>Note</th>
             <th>Project</th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -42,9 +43,8 @@ foreach ($weeks as $week => $days) { ?>
                 <?php if($i==0) echo "<td style='vertical-align: middle;' rowspan='".count($times)."'>".substr($time->getStart(), 0, 10)."</td>"; ?>
                 <td style="vertical-align: "><?php echo substr($time->getStart(), 11, 5) ?></td>
                 <td><?php echo substr($time->getEnd(), 11, 5) ?></td>
-                <td><?php echo $time->getUserId() ?></td>
                 <td><?php echo $time->getTempnote() ?></td>
-                <td><?php echo $time->getProjectId() ?></td>
+                <td><?php echo $this->tag->linkTo('times/listify/'.$time->getProjectId(), $time->getProjectId()); ?></td>
                 <td><?php echo $this->tag->linkTo(array("times/edit/" . $time->getId(), "Edit")); ?></td>
                 <td><?php echo $this->tag->linkTo(array("times/delete/" . $time->getId(), "Delete")); ?></td>
             </tr>
