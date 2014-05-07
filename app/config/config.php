@@ -7,6 +7,7 @@ return new \Phalcon\Config(array(
         'username'    => 'timeslip',
         'password'    => '',
         'dbname'      => 'timeslip',
+        'charset'     => 'utf8'
     ),
     'application' => array(
         'controllersDir' => __DIR__ . '/../../app/controllers/',
