@@ -4,6 +4,7 @@
     <?php foreach($customers as $customer) { ?>
         <tr>
             <td><?php echo $this->tag->linkTo('projects/index/'.$customer->getId(), $customer->getName()); ?></td>
+            <td><?php echo $customer->Projects->count();?> Projects</td>
         </tr>
     <?php } ?>
 </table>
