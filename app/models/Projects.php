@@ -142,7 +142,7 @@ class Projects extends \Phalcon\Mvc\Model
     {
         $this->belongsTo("customer_id", "Customers", "id", NULL);
         $this->belongsTo("user_id", "Users", "id", NULL);
-        $this->hasMany("id", "Times", "user_id", NULL);
+        $this->hasMany("id", "Times", "project_id", NULL);
     }
 
 }

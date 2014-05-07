@@ -31,7 +31,7 @@ $profiler = $this->getDI()->get('profiler');
 $profiles = $profiler->getProfiles();
 if($profiles != null) {
 ?>
-<div class="container">
+<div class="container hidden-print">
     <div class="panel panel-default">
         <ul class="list-group">
         <?php foreach ($profiles as $profile) { ?>

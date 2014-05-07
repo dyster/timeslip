@@ -11,7 +11,18 @@ class ProjectsController extends ControllerBase
      */
     public function indexAction()
     {
-        $this->persistent->parameters = null;
+        $projects = Projects::find('user_id = '.$this->auth->getId());
+        foreach($projects as $project)
+        {
+            $arr = $project->toArray();
+            $elap = 0;
+            foreach($project->Times as $time)
+                $elap += $time->getDuration();
+            $arr['total'] = round($elap/3600, 1);
+            $arr['customer'] = $project->Customers->getName();
+            $output[] = $arr;
+        }
+        $this->view->output = $output;
     }
 
     /**
