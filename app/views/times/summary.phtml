@@ -2,17 +2,31 @@
 
 <?php foreach($output as $year => $weeks) { ?>
 <div class="container-fluid">
-    <h2><?php echo $year; ?></h2>
-        <?php foreach($weeks as $week => $arr) { ?>
-            <div class="panel panel-default">
-                <div class="panel-heading"><?php echo "Week " . $week . " - " . round($arr['total']/3600) . " h"; ?></div>
+        <?php foreach($weeks as $week => $weekarr) { ?>
+            <div class="panel panel-primary">
+                <div class="panel-heading"><?php echo "$year Week " . $week . " - <strong>" . round($weekarr['total']/3600) . "h</strong>"; ?></div>
                 <div class="panel-body">
                     <ul>
-                        <?php foreach($arr['sums'] as $name => $sum) { ?>
+                        <?php foreach($weekarr['projects'] as $name => $sum) { ?>
                             <li><strong><?php echo round($sum/3600,1); ?> h</strong> - <?php echo $name; ?></li>
                         <?php } ?>
                     </ul>
                 </div>
+                <table class="table">
+                    <?php foreach($weekarr['days'] as $day => $dayarr) { $i=0; ?>
+                        <?php foreach($dayarr['projects'] as $name => $sum) { ?>
+                            <tr>
+                                <?php if($i==0) { $i++; ?>
+                                    <td style="vertical-align: middle" rowspan="<?php echo count($dayarr['projects']); ?>"><?php echo $day; ?></td>
+                                    <td style="vertical-align: middle" rowspan="<?php echo count($dayarr['projects']); ?>"><?php if(count($dayarr['projects']) > 1) echo "<strong>".round($dayarr['total']/3600,1)."h</strong>"; ?></td>
+                                <?php } ?>
+
+                                <td><strong><?php echo round($sum/3600,1); ?> h</strong></td>
+                                <td><?php echo $name; ?></td>
+                            </tr>
+                        <?php } ?>
+                    <?php } ?>
+                </table>
             </div>
         <?php } ?>
 </div>

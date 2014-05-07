@@ -171,6 +171,8 @@ class Times extends \Phalcon\Mvc\Model
      */
     public function getDuration()
     {
+        if($this->end == "0000-00-00 00:00:00")
+            $this->end = date(DATE_ATOM);
         $diff = strtotime($this->end) - strtotime($this->start);
         return $diff;
     }

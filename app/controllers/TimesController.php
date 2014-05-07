@@ -331,22 +331,30 @@ class TimesController extends ControllerBase
         $times = Times::find("user_id = $id");
         $output = array();
         foreach($times as $time) {
+            $day = date('D', strtotime($time->getStart()));
             $week = date('W', strtotime($time->getStart()));
             $year = date('Y', strtotime($time->getStart()));
 
-            if(empty($output[$year]))
-                $output[$year] = array();
+            $dur = $time->getDuration();
+
             if(empty($output[$year][$week]))
-                $output[$year][$week] = array('total' => 0, 'sums' => array());
+                $output[$year][$week] = array('total' => 0, 'days' => array(), 'projects' => array());
 
-            $output[$year][$week]['total'] += $time->getDuration();
+            if(empty($output[$year][$week]['projects'][$time->getTempnote()]))
+                $output[$year][$week]['projects'][$time->getTempnote()] = 0;
 
-            if(empty($output[$year][$week]['sums'][$time->getTempnote()]))
-                $output[$year][$week]['sums'][$time->getTempnote()] = $time->getDuration();
-            else
-                $output[$year][$week]['sums'][$time->getTempnote()] += $time->getDuration();
+            if(empty($output[$year][$week]['days'][$day]))
+                $output[$year][$week]['days'][$day] = array('total' => 0, 'projects' => array());
 
-            $output[$year][$week]['sums'][$time->getTempnote()] += $time->getDuration();
+            if(empty($output[$year][$week]['days'][$day]['projects'][$time->getTempnote()]))
+                $output[$year][$week]['days'][$day]['projects'][$time->getTempnote()] = 0;
+
+
+
+            $output[$year][$week]['total'] += $dur;
+            $output[$year][$week]['days'][$day]['total'] += $dur;
+            $output[$year][$week]['days'][$day]['projects'][$time->getTempnote()] += $time->getDuration();
+            $output[$year][$week]['projects'][$time->getTempnote()] += $time->getDuration();
         }
 
         $this->view->output = $output;
