@@ -35,18 +35,23 @@
 <?php
 $profiler = $this->getDI()->get('profiler');
 $profiles = $profiler->getProfiles();
+$noQueries = $profiler->getNumberTotalStatements();
 if($profiles != null) {
 ?>
 <div class="container hidden-print">
     <div class="panel panel-default">
         <ul class="list-group">
-        <?php foreach ($profiles as $profile) { ?>
+        <?php
+        foreach ($profiles as $profile)
+        {
+            if($noQueries > 20 && $profile->getTotalElapsedSeconds() < 0.02) continue;
+            ?>
             <li class="list-group-item">
                 <?php echo $profile->getSQLStatement(); ?>
                 <span class="badge"><?php echo round($profile->getTotalElapsedSeconds(), 3); ?></span>
             </li>
         <?php } ?>
-            <li class="list-group-item">Total: <?php echo $profiler->getNumberTotalStatements() . " in " . $profiler->getTotalElapsedSeconds(); ?></li>
+            <li class="list-group-item">Total: <?php echo "$noQueries queries in " . $profiler->getTotalElapsedSeconds(); ?></li>
         </ul>
     </div>
 </div>
