@@ -44,9 +44,9 @@ foreach ($weeks as $week => $days) { ?>
                 <td style="vertical-align: "><?php echo substr($time->getStart(), 11, 5) ?></td>
                 <td><?php echo substr($time->getEnd(), 11, 5) ?></td>
                 <td><?php echo $time->getTempnote() ?></td>
-                <td><?php echo $this->tag->linkTo('times/listify/'.$time->getProjectId(), $time->getProjectId()); ?></td>
-                <td><?php echo $this->tag->linkTo(array("times/edit/" . $time->getId(), "Edit")); ?></td>
-                <td><?php echo $this->tag->linkTo(array("times/delete/" . $time->getId(), "Delete")); ?></td>
+                <td><?php echo $this->tag->linkTo('times/listify/'.$time->getProjectId(), Helpers::shortify($time->Projects->getName())); ?></td>
+                <td class="hidden-print"><?php echo $this->tag->linkTo(array("times/edit/" . $time->getId(), "Edit")); ?></td>
+                <td class="hidden-print"><?php echo $this->tag->linkTo(array("times/delete/" . $time->getId(), "Delete")); ?></td>
             </tr>
         <?php } } ?>
         </tbody>
