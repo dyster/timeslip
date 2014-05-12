@@ -110,6 +110,11 @@ $di->set('elements', function () {
     return new Elements();
 });
 
+$di->set('Helpers',  function()
+{
+    return new Helpers();
+});
+
 /**
  * Custom authentication component
  */
