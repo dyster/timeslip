@@ -1,0 +1,9 @@
+<?php echo $this->getContent(); ?>
+
+<form method="post">
+    <div class="form-group">
+        <h3>Confirm removal of "<?php echo $time->getTempnote(); ?>"</h3>
+        <?php echo $this->tag->hiddenField(array('confirm', 'value' => 1)); ?>
+        <?php echo $this->tag->submitButton(array('Confirm', 'class' => 'btn btn-block btn-lg btn-warning')); ?>
+    </div>
+</form>

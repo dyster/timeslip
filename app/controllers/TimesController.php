@@ -256,7 +256,17 @@ class TimesController extends ControllerBase
 
         $time = Times::findFirstByid($id);
         if (!$time) {
-            $this->flash->error("time was not found");
+            $this->flash->error("There is no time with id $id");
+
+            return $this->dispatcher->forward(array(
+                "controller" => "times",
+                "action" => "listify",
+                "params" => array()
+            ));
+        }
+
+        if($time->getUserId() != $this->auth->getId()) {
+            $this->flash->error("This time does not belong to you!");
 
             return $this->dispatcher->forward(array(
                 "controller" => "times",
@@ -264,24 +274,25 @@ class TimesController extends ControllerBase
             ));
         }
 
-        if (!$time->delete()) {
+        if($this->request->isPost()) {
+            if($this->request->getPost('confirm') == 1) {
 
-            foreach ($time->getMessages() as $message) {
-                $this->flash->error($message);
+                if(!$time->delete()) {
+                    $this->flash->error($time->getMessages());
+                }
+                else
+                    $this->flash->success('Time was deleted successfully');
+
+                return $this->dispatcher->forward(array(
+                    "controller" => "times",
+                    "action" => "listify",
+                    "params" => array()
+                ));
             }
 
-            return $this->dispatcher->forward(array(
-                "controller" => "times",
-                "action" => "search"
-            ));
         }
 
-        $this->flash->success("time was deleted successfully");
-
-        return $this->dispatcher->forward(array(
-            "controller" => "times",
-            "action" => "index"
-        ));
+        $this->view->time = $time;
     }
 
     public function summaryAction()
