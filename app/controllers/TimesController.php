@@ -154,29 +154,43 @@ class TimesController extends ControllerBase
      */
     public function editAction($id)
     {
+        $time = Times::findFirstByid($id);
+        if (!$time) {
+            $this->flash->error("There is no time with id $id");
 
-        if (!$this->request->isPost()) {
+            return $this->dispatcher->forward(array(
+                "controller" => "times",
+                "action" => "index"
+            ));
+        }
 
-            $time = Times::findFirstByid($id);
-            if (!$time) {
-                $this->flash->error("time was not found");
+        if($time->getUserId() != $this->auth->getId()) {
+            $this->flash->error("This time does not belong to you!");
 
-                return $this->dispatcher->forward(array(
-                    "controller" => "times",
-                    "action" => "index"
-                ));
+            return $this->dispatcher->forward(array(
+                "controller" => "times",
+                "action" => "index"
+            ));
+        }
+
+
+        if ($this->request->isPost()) {
+
+            $time->setStart($this->request->getPost("start"));
+            $time->setEnd($this->request->getPost("end"));
+            $time->setTempnote($this->request->getPost("tempnote"));
+            $time->setProjectId($this->request->getPost("project_id"));
+
+            if (!$time->save()) {
+                $this->flash->error($time->getMessages());
+            }
+            else {
+                $this->flash->success("time was updated successfully");
             }
 
-            $this->view->id = $time->id;
-
-            $this->tag->setDefault("id", $time->getId());
-            $this->tag->setDefault("start", $time->getStart());
-            $this->tag->setDefault("end", $time->getEnd());
-            $this->tag->setDefault("user_id", $time->getUserId());
-            $this->tag->setDefault("tempnote", $time->getTempnote());
-            $this->tag->setDefault("project_id", $time->getProjectId());
-            
         }
+
+        $this->view->form = new EditTimeForm($time);
     }
 
     /**
@@ -230,61 +244,6 @@ class TimesController extends ControllerBase
                 return $str[0].$str[1].':'.$str[2].$str[3].':00';
         }
         return $str;
-    }
-
-    /**
-     * Saves a time edited
-     *
-     */
-    public function saveAction()
-    {
-
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "times",
-                "action" => "index"
-            ));
-        }
-
-        $id = $this->request->getPost("id");
-
-        $time = Times::findFirstByid($id);
-        if (!$time) {
-            $this->flash->error("time does not exist " . $id);
-
-            return $this->dispatcher->forward(array(
-                "controller" => "times",
-                "action" => "index"
-            ));
-        }
-
-        $time->setStart($this->request->getPost("start"));
-        $time->setEnd($this->request->getPost("end"));
-        $time->setUserId($this->request->getPost("user_id"));
-        $time->setTempnote($this->request->getPost("tempnote"));
-        $time->setProjectId($this->request->getPost("project_id"));
-        
-
-        if (!$time->save()) {
-
-            foreach ($time->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            return $this->dispatcher->forward(array(
-                "controller" => "times",
-                "action" => "edit",
-                "params" => array($time->id)
-            ));
-        }
-
-        $this->flash->success("time was updated successfully");
-
-        return $this->dispatcher->forward(array(
-            "controller" => "times",
-            "action" => "index"
-        ));
-
     }
 
     /**

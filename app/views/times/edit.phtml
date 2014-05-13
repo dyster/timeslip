@@ -1,65 +1,31 @@
 
 <?php echo $this->getContent(); ?>
 
-<?php echo $this->tag->form("times/save") ?>
+<form method="post">
 
-<table width="100%">
-    <tr>
-        <td align="left"><?php echo $this->tag->linkTo(array("times", "Back")) ?></td>
-        <td align="right"><?php echo $this->tag->submitButton("Save") ?></td>
-    <tr>
-</table>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <?php echo $this->view->form->label('start'); ?>
+            <?php echo $this->view->form->render('start'); ?>
+        </div>
 
-<div align="center">
-    <h1>Edit times</h1>
-</div>
+        <div class="form-group col-sm-6">
+            <?php echo $this->view->form->label('end'); ?>
+            <?php echo $this->view->form->render('end'); ?>
+        </div>
+    </div>
 
-<table>
-    <tr>
-        <td align="right">
-            <label for="start">Start</label>
-        </td>
-        <td align="left">
-            <?php echo $this->tag->textField(array("start", "size" => 30)) ?>
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="end">End</label>
-        </td>
-        <td align="left">
-            <?php echo $this->tag->textField(array("end", "size" => 30)) ?>
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="user_id">User</label>
-        </td>
-        <td align="left">
-            <?php echo $this->tag->textField(array("user_id", "type" => "number")) ?>
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="tempnote">Tempnote</label>
-        </td>
-        <td align="left">
-            <?php echo $this->tag->textField(array("tempnote", "size" => 30)) ?>
-        </td>
-    </tr>
-    <tr>
-        <td align="right">
-            <label for="project_id">Project</label>
-        </td>
-        <td align="left">
-            <?php echo $this->tag->textField(array("project_id", "type" => "number")) ?>
-        </td>
-    </tr>
-
-    <tr>
-        <td><?php echo $this->tag->hiddenField("id") ?></td>
-        <td><?php echo $this->tag->submitButton("Search") ?></td>
-    </tr>
-</table>
+    <div class="form-group">
+        <?php echo $this->view->form->label('tempnote'); ?>
+        <?php echo $this->view->form->render('tempnote'); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->view->form->label('project_id'); ?>
+        <?php echo $this->view->form->render('project_id'); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->view->form->render('Save'); ?>
+        <?php echo $this->view->form->render('csrf'); ?>
+    </div>
 
 </form>
