@@ -44,7 +44,9 @@ class SessionController extends ControllerBase
         if ($this->request->isPost()) {
 
             if ($form->isValid($this->request->getPost()) == false) {
-                $this->flash->error($form->getMessages());
+                foreach ($form->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
             } else {
 
                 $user = Users::findFirstByEmail($this->request->getPost('email'));
@@ -57,7 +59,9 @@ class SessionController extends ControllerBase
                     if ($resetPassword->save()) {
                         $this->flash->success('Success! Please check your messages for an email reset password');
                     } else {
-                        $this->flash->error($resetPassword->getMessages());
+                        foreach ($resetPassword->getMessages() as $message) {
+                            $this->flash->error($message);
+                        }
                     }
                 }
             }
