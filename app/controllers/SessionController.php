@@ -18,7 +18,9 @@ class SessionController extends ControllerBase
             } else {
 
                 if ($form->isValid($this->request->getPost()) == false) {
-                    $this->flash->error($form->getMessages());
+                    foreach ($form->getMessages() as $message) {
+                        $this->flash->error($message);
+                    }
                 } else {
 
                     $this->auth->check(array(
