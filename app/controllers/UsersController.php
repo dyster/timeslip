@@ -112,7 +112,9 @@ class UsersController extends ControllerBase
         
 
         if (!$user->save()) {
-            $this->flash->error($user->getMessages());
+            foreach ($user->getMessages() as $message) {
+                $this->flash->error($message);
+            }
 
             return $this->dispatcher->forward(array(
                 "controller" => "users",
@@ -162,7 +164,9 @@ class UsersController extends ControllerBase
 
         if (!$user->save()) {
 
-            $this->flash->error($user->getMessages());
+            foreach ($user->getMessages() as $message) {
+                $this->flash->error($message);
+            }
 
             return $this->dispatcher->forward(array(
                 "controller" => "users",
@@ -200,7 +204,9 @@ class UsersController extends ControllerBase
 
         if (!$user->delete()) {
 
-            $this->flash->error($user->getMessages());
+            foreach ($user->getMessages() as $message) {
+                $this->flash->error($message);
+            }
 
             return $this->dispatcher->forward(array(
                 "controller" => "users",
