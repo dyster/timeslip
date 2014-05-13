@@ -62,6 +62,7 @@ class TimesController extends ControllerBase
             foreach($this->request->getPost() as $id => $pid) {
                 if($pid > 0) {
                     $time = Times::findFirst($id);
+                    self::checkTime($time);
                     $time->setProjectId($pid);
                     if (!$time->save()) {
                         foreach ($time->getMessages() as $message) {
@@ -155,24 +156,8 @@ class TimesController extends ControllerBase
     public function editAction($id)
     {
         $time = Times::findFirstByid($id);
-        if (!$time) {
-            $this->flash->error("There is no time with id $id");
 
-            return $this->dispatcher->forward(array(
-                "controller" => "times",
-                "action" => "index"
-            ));
-        }
-
-        if($time->getUserId() != $this->auth->getId()) {
-            $this->flash->error("This time does not belong to you!");
-
-            return $this->dispatcher->forward(array(
-                "controller" => "times",
-                "action" => "index"
-            ));
-        }
-
+        self::checkTime($time);
 
         if ($this->request->isPost()) {
 
@@ -235,6 +220,30 @@ class TimesController extends ControllerBase
         $this->view->form = $form;
     }
 
+    /*
+     * Checks if time is owned by user
+     */
+    private function checkTime($time)
+    {
+        if (!$time) {
+            $this->flash->error("Time does not exist");
+
+            return $this->dispatcher->forward(array(
+                "controller" => "times",
+                "action" => "index"
+            ));
+        }
+
+        if($time->getUserId() != $this->auth->getId()) {
+            $this->flash->error("This time does not belong to you!");
+
+            return $this->dispatcher->forward(array(
+                "controller" => "times",
+                "action" => "index"
+            ));
+        }
+    }
+
     private function fixTime($str)
     {
         switch(strlen($str)) {
@@ -255,24 +264,8 @@ class TimesController extends ControllerBase
     {
 
         $time = Times::findFirstByid($id);
-        if (!$time) {
-            $this->flash->error("There is no time with id $id");
 
-            return $this->dispatcher->forward(array(
-                "controller" => "times",
-                "action" => "listify",
-                "params" => array()
-            ));
-        }
-
-        if($time->getUserId() != $this->auth->getId()) {
-            $this->flash->error("This time does not belong to you!");
-
-            return $this->dispatcher->forward(array(
-                "controller" => "times",
-                "action" => "index"
-            ));
-        }
+        self::checkTime($time);
 
         if($this->request->isPost()) {
             if($this->request->getPost('confirm') == 1) {
