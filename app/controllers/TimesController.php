@@ -161,7 +161,9 @@ class TimesController extends ControllerBase
             $time->setProjectId($this->request->getPost("project_id"));
 
             if (!$time->save()) {
-                $this->flash->error($time->getMessages());
+                foreach ($time->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
             }
             else {
                 $this->flash->success("time was updated successfully");
@@ -261,7 +263,9 @@ class TimesController extends ControllerBase
             if($this->request->getPost('confirm') == 1) {
 
                 if(!$time->delete()) {
-                    $this->flash->error($time->getMessages());
+                    foreach ($time->getMessages() as $message) {
+                        $this->flash->error($message);
+                    }
                 }
                 else
                     $this->flash->success('Time was deleted successfully');
