@@ -21,10 +21,8 @@ class ControllerBase extends Controller
 
             $this->flash->error('You must be logged in');
 
-            $dispatcher->forward(array(
-                'controller' => 'session',
-                'action' => 'login'
-            ));
+            $this->response->redirect('session/login');
+
             return false;
         }
     }
