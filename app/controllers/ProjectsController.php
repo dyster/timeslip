@@ -130,9 +130,7 @@ class ProjectsController extends ControllerBase
         
 
         if (!$project->save()) {
-            foreach ($project->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+            $this->flash->error($project->getMessages());
 
             return $this->dispatcher->forward(array(
                 "controller" => "projects",
@@ -183,9 +181,7 @@ class ProjectsController extends ControllerBase
 
         if (!$project->save()) {
 
-            foreach ($project->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+            $this->flash->error($project->getMessages());
 
             return $this->dispatcher->forward(array(
                 "controller" => "projects",
@@ -223,9 +219,7 @@ class ProjectsController extends ControllerBase
 
         if (!$project->delete()) {
 
-            foreach ($project->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+            $this->flash->error($project->getMessages());
 
             return $this->dispatcher->forward(array(
                 "controller" => "projects",

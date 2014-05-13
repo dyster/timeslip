@@ -21,9 +21,7 @@ class TimesController extends ControllerBase
             if($halftime !== false) {
                 $halftime->setEnd(date(DATE_ATOM));
                 if (!$halftime->save()) {
-                    foreach ($halftime->getMessages() as $message) {
-                        $this->flash->error($message);
-                    }
+                    $this->flash->error($halftime->getMessages());
                 }
             }
 
@@ -35,9 +33,7 @@ class TimesController extends ControllerBase
                 $time->setEnd('0000-00-00 00:00:00');
                 $time->setProjectId(0);
                 if (!$time->save()) {
-                    foreach ($time->getMessages() as $message) {
-                        $this->flash->error($message);
-                    }
+                    $this->flash->error($time->getMessages());
                 }
             }
 
@@ -65,9 +61,7 @@ class TimesController extends ControllerBase
                     self::checkTime($time);
                     $time->setProjectId($pid);
                     if (!$time->save()) {
-                        foreach ($time->getMessages() as $message) {
-                            $this->flash->error($message);
-                        }
+                        $this->flash->error($time->getMessages());
                     }
                 }
             }
@@ -188,9 +182,7 @@ class TimesController extends ControllerBase
         if ($this->request->isPost()) {
 
             if ($form->isValid($this->request->getPost()) == false) {
-                foreach ($form->getMessages() as $message) {
-                    $this->flash->error($message);
-                }
+                $this->flash->error($form->getMessages());
             } else {
                 $time = new Times();
 
@@ -205,9 +197,7 @@ class TimesController extends ControllerBase
                 $time->setProjectId($this->request->getPost("project_id"));
 
                 if (!$time->save()) {
-                    foreach ($time->getMessages() as $message) {
-                        $this->flash->error($message);
-                    }
+                    $this->flash->error($time->getMessages());
                 }
                 else
                     $this->flash->success("time was created successfully");

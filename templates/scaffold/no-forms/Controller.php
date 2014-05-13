@@ -105,9 +105,7 @@ class $className$Controller extends ControllerBase
         $assignInputFromRequestCreate$
 
         if (!$singularVar$->save()) {
-            foreach ($singularVar$->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+            $this->flash->error($singularVar$->getMessages());
 
             return $this->dispatcher->forward(array(
                 "controller" => "$plural$",
@@ -154,9 +152,7 @@ class $className$Controller extends ControllerBase
 
         if (!$singularVar$->save()) {
 
-            foreach ($singularVar$->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+            $this->flash->error($singularVar$->getMessages());
 
             return $this->dispatcher->forward(array(
                 "controller" => "$plural$",
@@ -194,9 +190,7 @@ class $className$Controller extends ControllerBase
 
         if (!$singularVar$->delete()) {
 
-            foreach ($singularVar$->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+            $this->flash->error($singularVar$->getMessages());
 
             return $this->dispatcher->forward(array(
                 "controller" => "$plural$",

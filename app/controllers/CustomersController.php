@@ -110,9 +110,7 @@ class CustomersController extends ControllerBase
         
 
         if (!$customer->save()) {
-            foreach ($customer->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+            $this->flash->error($customer->getMessages());
 
             return $this->dispatcher->forward(array(
                 "controller" => "customers",
@@ -161,9 +159,7 @@ class CustomersController extends ControllerBase
 
         if (!$customer->save()) {
 
-            foreach ($customer->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+            $this->flash->error($customer->getMessages());
 
             return $this->dispatcher->forward(array(
                 "controller" => "customers",
@@ -201,9 +197,7 @@ class CustomersController extends ControllerBase
 
         if (!$customer->delete()) {
 
-            foreach ($customer->getMessages() as $message) {
-                $this->flash->error($message);
-            }
+            $this->flash->error($customer->getMessages());
 
             return $this->dispatcher->forward(array(
                 "controller" => "customers",

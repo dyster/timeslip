@@ -18,9 +18,7 @@ class SessionController extends ControllerBase
             } else {
 
                 if ($form->isValid($this->request->getPost()) == false) {
-                    foreach ($form->getMessages() as $message) {
-                        $this->flash->error($message);
-                    }
+                    $this->flash->error($form->getMessages());
                 } else {
 
                     $this->auth->check(array(
@@ -46,9 +44,7 @@ class SessionController extends ControllerBase
         if ($this->request->isPost()) {
 
             if ($form->isValid($this->request->getPost()) == false) {
-                foreach ($form->getMessages() as $message) {
-                    $this->flash->error($message);
-                }
+                $this->flash->error($form->getMessages());
             } else {
 
                 $user = Users::findFirstByEmail($this->request->getPost('email'));
@@ -61,9 +57,7 @@ class SessionController extends ControllerBase
                     if ($resetPassword->save()) {
                         $this->flash->success('Success! Please check your messages for an email reset password');
                     } else {
-                        foreach ($resetPassword->getMessages() as $message) {
-                            $this->flash->error($message);
-                        }
+                        $this->flash->error($resetPassword->getMessages());
                     }
                 }
             }
