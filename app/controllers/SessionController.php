@@ -16,21 +16,19 @@ class SessionController extends ControllerBase
                     return $this->auth->loginWithRememberMe();
                 }
             } else {
+                    if ($form->isValid($this->request->getPost()) == false) {
+                        foreach ($form->getMessages() as $message) {
+                            $this->flash->error($message);
+                        }
+                    } else {
+                        $this->auth->check(array(
+                            'email' => $this->request->getPost('email'),
+                            'password' => $this->request->getPost('password'),
+                            'remember' => $this->request->getPost('remember')
+                        ));
 
-                if ($form->isValid($this->request->getPost()) == false) {
-                    foreach ($form->getMessages() as $message) {
-                        $this->flash->error($message);
+                        return $this->response->redirect('times');
                     }
-                } else {
-
-                    $this->auth->check(array(
-                        'email' => $this->request->getPost('email'),
-                        'password' => $this->request->getPost('password'),
-                        'remember' => $this->request->getPost('remember')
-                    ));
-
-                    return $this->response->redirect('times');
-                }
             }
         } catch (AuthException $e) {
             $this->flash->error($e->getMessage());

@@ -16,7 +16,7 @@ class ControllerBase extends Controller
 
         $identity = $this->auth->getIdentity();
 
-        // If there is no identity available the user is redirected to index/index
+
         if (!is_array($identity)) {
 
             $this->flash->error('You must be logged in');

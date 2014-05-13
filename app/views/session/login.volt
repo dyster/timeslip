@@ -19,7 +19,7 @@
 
         {{ form.render('Sign in') }}
 
-		{{ form.render('csrf', ['value': security.getToken()]) }}
+		{{ form.render('csrf') }}
 
 		<hr>
 
