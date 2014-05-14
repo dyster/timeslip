@@ -46,8 +46,17 @@ class TimesController extends ControllerBase
 
 
         $halftime = Times::findFirst('end IS NULL');
-        $recents = Times::find(array("order" => "end DESC", "limit" => 5, "columns" => "tempnote", "group" => "tempnote"));
-
+        //$recents = Times::find(array("order" => "end DESC", "limit" => 5, "columns" => "tempnote", "group" => "tempnote"));
+        $row = 0;
+        $i = 0;
+        foreach(Times::find(array("order" => "end DESC", "limit" => 9, "columns" => "tempnote", "group" => "tempnote")) as $recent) {
+            $recents[$row][] = $recent;
+            $i++;
+            if($i==3) {
+                $i=0;
+                $row++;
+            }
+        }
         if($halftime === false)
             $state = 'stopped';
         else

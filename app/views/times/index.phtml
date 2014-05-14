@@ -27,12 +27,20 @@ echo $this->tag->hiddenField(array('action', 'value' => 'stop')); ?>
 </form>
 
 <h3>Recent</h3>
-<div class="btn-group-vertical">
-    <?php foreach($recents as $rec) { ?>
-        <?php echo $this->tag->form();?>
-        <?php echo $this->tag->hiddenField(array('action', 'value' => 'start')); ?>
-        <?php echo $this->tag->hiddenField(array('tempnote', 'value' => $rec->tempnote)); ?>
-        <button class="btn btn-default" type="submit"><?php echo $rec->tempnote;?></button>
-        </form>
+<div class="">
+<div class="">
+    <?php foreach($recents as $row) { ?>
+        <div class="row form-group">
+        <?php foreach($row as $recent) { ?>
+            <div class="col-sm-4">
+                <?php echo $this->tag->form();?>
+                <?php echo $this->tag->hiddenField(array('action', 'value' => 'start')); ?>
+                <?php echo $this->tag->hiddenField(array('tempnote', 'value' => $recent->tempnote)); ?>
+                <button class="btn btn-default btn-block" type="submit"><?php echo $recent->tempnote;?></button>
+                </form>
+            </div>
+        <?php } ?>
+        </div>
     <?php } ?>
+</div>
 </div>
