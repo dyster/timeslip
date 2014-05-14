@@ -56,22 +56,6 @@ $di->set('view', function () use ($config) {
  * Database connection is created based in the parameters defined in the configuration file
  */
 $di->set('db', function () use ($config, $di) {
-    $eventsManager = new \Phalcon\Events\Manager();
-
-    $profiler = $di->getProfiler();
-
-    $eventsManager->attach('db', function($event, $connection) use ($profiler) {
-        if ($event->getType() == 'beforeQuery') {
-            $str = $connection->getRealSQLStatement();
-            $vars = $connection->getSQLVariables();
-            if(!empty($vars))
-                $str .= " <strong>VARS=</strong>".json_encode($connection->getSQLVariables());
-            $profiler->startProfile($str);
-        }
-        if ($event->getType() == 'afterQuery') {
-            $profiler->stopProfile();
-        }
-    });
 
     $connection = new DbAdapter(array(
         'host' => $config->database->host,
@@ -84,7 +68,32 @@ $di->set('db', function () use ($config, $di) {
         )
     ));
 
-    $connection->setEventsManager($eventsManager);
+    if($config->database->debug) {
+
+        $eventsManager = new \Phalcon\Events\Manager();
+
+        $profiler = $di->getProfiler();
+
+        $eventsManager->attach('db', function($event, $connection) use ($profiler) {
+            if ($event->getType() == 'beforeQuery') {
+                $str = $connection->getRealSQLStatement();
+                $vars = $connection->getSQLVariables();
+                if(!empty($vars))
+                    $str .= " <strong>VARS=</strong>".json_encode($connection->getSQLVariables());
+                $profiler->startProfile($str);
+            }
+            if ($event->getType() == 'afterQuery') {
+                $profiler->stopProfile();
+            }
+        });
+
+        $connection->setEventsManager($eventsManager);
+    }
+
+
+
+
+
 
     return $connection;
 });
