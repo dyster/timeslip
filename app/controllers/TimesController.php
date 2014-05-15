@@ -107,7 +107,7 @@ class TimesController extends ControllerBase
                 "project_id = $param AND user_id = ".$this->auth->getId()
             ));
         }
-
+        $output = array();
         foreach($times as $time) {
             $week = date('W', strtotime($time->getStart()));
             $year = date('Y', strtotime($time->getStart()));
