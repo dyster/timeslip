@@ -26,9 +26,10 @@ echo $this->tag->hiddenField(array('action', 'value' => 'stop')); ?>
 </div>
 </form>
 
-<h3>Recent</h3>
-<div class="">
-<div class="">
+<?php if(!empty($recents)) { ?>
+    <h3>Recent</h3>
+<?php } ?>
+
     <?php foreach($recents as $row) { ?>
         <div class="row form-group">
         <?php foreach($row as $recent) { ?>
@@ -42,5 +43,3 @@ echo $this->tag->hiddenField(array('action', 'value' => 'stop')); ?>
         <?php } ?>
         </div>
     <?php } ?>
-</div>
-</div>

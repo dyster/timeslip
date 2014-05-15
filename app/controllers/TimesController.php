@@ -49,7 +49,8 @@ class TimesController extends ControllerBase
         //$recents = Times::find(array("order" => "end DESC", "limit" => 5, "columns" => "tempnote", "group" => "tempnote"));
         $row = 0;
         $i = 0;
-        foreach(Times::find(array("order" => "end DESC", "limit" => 9, "columns" => "tempnote", "group" => "tempnote")) as $recent) {
+        $recents = array();
+        foreach(Times::find(array('user_id = '.$this->auth->getId(), "order" => "end DESC", "limit" => 9, "columns" => "tempnote", "group" => "tempnote")) as $recent) {
             $recents[$row][] = $recent;
             $i++;
             if($i==3) {
