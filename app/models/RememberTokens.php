@@ -1,5 +1,4 @@
 <?php
-namespace Timeslip\Models;
 
 use Phalcon\Mvc\Model;
 
