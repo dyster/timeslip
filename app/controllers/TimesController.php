@@ -91,6 +91,8 @@ class TimesController extends ControllerBase
 
         $times = Times::find('user_id = ' . $this->auth->getId() . ' AND project_id = 0');
         $this->view->times = $times;
+        if(!count($times))
+            $this->view->disableLevel(Phalcon\Mvc\View::LEVEL_ACTION_VIEW);
     }
 
     public function listifyAction()
