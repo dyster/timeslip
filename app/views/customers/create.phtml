@@ -1,0 +1,14 @@
+<?php echo $this->getContent(); ?>
+
+<form method="post">
+
+    <div class="form-group">
+        <?php echo $this->view->form->label('name'); ?>
+        <?php echo $this->view->form->render('name'); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->view->form->render('Add'); ?>
+        <?php echo $this->view->form->render('csrf'); ?>
+    </div>
+
+</form>

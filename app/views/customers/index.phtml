@@ -1,5 +1,11 @@
 
 <?php echo $this->getContent() ?>
+
+<ol class="breadcrumb">
+    <li><?php echo $this->tag->linkTo('customers/create', 'Create new customer'); ?></li>
+</ol>
+
+
 <table class="table">
     <?php foreach($customers as $customer) { ?>
         <tr>

@@ -95,38 +95,30 @@ class CustomersController extends ControllerBase
      */
     public function createAction()
     {
+        $form = new CreateCustomerForm();
 
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "customers",
-                "action" => "index"
-            ));
-        }
+        if ($this->request->isPost()) {
 
-        $customer = new Customers();
+            if ($form->isValid($this->request->getPost()) == false) {
+                foreach ($form->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
+            } else
+                $customer = new Customers();
+                $customer->setName($this->request->getPost('name'));
+                $customer->setUserId($this->auth->getId());
 
-        $customer->setUserId($this->request->getPost("user_id"));
-        $customer->setName($this->request->getPost("name"));
-        
-
-        if (!$customer->save()) {
-            foreach ($customer->getMessages() as $message) {
-                $this->flash->error($message);
+                if (!$customer->save()) {
+                    foreach ($customer->getMessages() as $message) {
+                        $this->flash->error($message);
+                    }
+                }
+                else {
+                    $this->flash->success("Customer was created successfully");
+                    $this->dispatcher->forward(array('controller' => 'customers', 'action' => 'index'));
+                }
             }
-
-            return $this->dispatcher->forward(array(
-                "controller" => "customers",
-                "action" => "new"
-            ));
-        }
-
-        $this->flash->success("customer was created successfully");
-
-        return $this->dispatcher->forward(array(
-            "controller" => "customers",
-            "action" => "index"
-        ));
-
+        $this->view->form = $form;
     }
 
     /**

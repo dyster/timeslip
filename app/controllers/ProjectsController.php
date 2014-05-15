@@ -113,40 +113,32 @@ class ProjectsController extends ControllerBase
      */
     public function createAction()
     {
+        $form = new CreateProjectForm();
 
-        if (!$this->request->isPost()) {
-            return $this->dispatcher->forward(array(
-                "controller" => "projects",
-                "action" => "index"
-            ));
-        }
+        if ($this->request->isPost()) {
 
-        $project = new Projects();
+            if ($form->isValid($this->request->getPost()) == false) {
+                foreach ($form->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
+            } else
+                $project = new Projects();
+            $project->setName($this->request->getPost('name'));
+            $project->setUserId($this->auth->getId());
+            $project->setTouch(date(DATE_ATOM));
+            $project->setCustomerId($this->request->getPost('customer_id'));
 
-        $project->setName($this->request->getPost("name"));
-        $project->setTouch($this->request->getPost("touch"));
-        $project->setUserId($this->request->getPost("user_id"));
-        $project->setCustomerId($this->request->getPost("customer_id"));
-        
-
-        if (!$project->save()) {
-            foreach ($project->getMessages() as $message) {
-                $this->flash->error($message);
+            if (!$project->save()) {
+                foreach ($project->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
             }
-
-            return $this->dispatcher->forward(array(
-                "controller" => "projects",
-                "action" => "new"
-            ));
+            else {
+                $this->flash->success("Project was created successfully");
+                $this->dispatcher->forward(array('controller' => 'projects', 'action' => 'index'));
+            }
         }
-
-        $this->flash->success("project was created successfully");
-
-        return $this->dispatcher->forward(array(
-            "controller" => "projects",
-            "action" => "index"
-        ));
-
+        $this->view->form = $form;
     }
 
     /**
