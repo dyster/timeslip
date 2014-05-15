@@ -89,7 +89,8 @@ class SessionController extends ControllerBase
                     'password' => $this->security->hash($this->request->getPost('password')),
                     'profilesId' => 0,
                     'banned' => 'N',
-                    'suspended' => 'N'
+                    'suspended' => 'N',
+                    'active' => 'Y'
                 ));
 
                 if ($user->save()) {
