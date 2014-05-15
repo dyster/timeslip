@@ -80,7 +80,7 @@ class Elements extends Phalcon\Mvc\User\Component
         $name = $this->auth->getName();
 
         $this->_headerMenu['pull-right'][$name] = array(
-                'controller' => 'user',
+                'controller' => 'users',
                 'action' => 'profile'
         );
 
