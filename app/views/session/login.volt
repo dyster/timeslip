@@ -23,6 +23,10 @@
 
 		<hr>
 
+		<div class="signup">
+        			{{ link_to("session/signup", "Signup") }}
+        </div>
+
 		<div class="forgot">
 			{{ link_to("session/forgotPassword", "Forgot my password") }}
 		</div>

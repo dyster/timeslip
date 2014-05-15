@@ -70,6 +70,47 @@ class SessionController extends ControllerBase
         $this->view->form = $form;
     }
 
+    /**
+     * Allow a user to signup to the system
+     */
+    public function signupAction()
+    {
+        $form = new SignUpForm();
+
+        if ($this->request->isPost()) {
+
+            if ($form->isValid($this->request->getPost()) != false) {
+
+                $user = new Users();
+
+                $user->assign(array(
+                    'name' => $this->request->getPost('name', 'striptags'),
+                    'email' => $this->request->getPost('email'),
+                    'password' => $this->security->hash($this->request->getPost('password')),
+                    'profilesId' => 0,
+                    'banned' => 'N',
+                    'suspended' => 'N'
+                ));
+
+                if ($user->save()) {
+
+                    $this->flash->success("You have successfully registered! Please login");
+
+                    return $this->dispatcher->forward(array(
+                        'controller' => 'session',
+                        'action' => 'login'
+                    ));
+                }
+                foreach($user->getMessages() as $message) {
+                    $this->flash->error($message);
+                }
+
+            }
+        }
+
+        $this->view->form = $form;
+    }
+
     public function logoutAction()
     {
         $this->auth->remove();
