@@ -14,6 +14,14 @@ class UsersController extends ControllerBase
         $this->persistent->parameters = null;
     }
 
+    public function profileAction()
+    {
+        $user = Users::findFirst($this->auth->getId());
+
+        $this->view->user = $user;
+
+    }
+
     /**
      * Searches for users
      */
