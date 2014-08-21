@@ -68,6 +68,7 @@ class TimesController extends ControllerBase
 
     public function categoriseAction()
     {
+        $this->tag->appendTitle(" - Categorise");
         if($this->request->isPost()) {
             foreach($this->request->getPost() as $id => $pid) {
                 if($pid > 0) {
@@ -97,6 +98,7 @@ class TimesController extends ControllerBase
 
     public function listifyAction()
     {
+        $this->tag->appendTitle(" - Listify");
         $param = $this->dispatcher->getParam(0);
         if(empty($param)) {
             $times = Times::find(array(
@@ -126,6 +128,7 @@ class TimesController extends ControllerBase
      */
     public function searchAction()
     {
+        $this->tag->appendTitle(" - Search");
 
         $numberPage = 1;
         if ($this->request->isPost()) {
@@ -167,6 +170,8 @@ class TimesController extends ControllerBase
      */
     public function editAction($id)
     {
+        $this->tag->appendTitle(" - Edit Time");
+
         $time = Times::findFirstByid($id);
 
         self::checkTime($time);
@@ -197,6 +202,8 @@ class TimesController extends ControllerBase
      */
     public function createAction()
     {
+        $this->tag->appendTitle(" - Add Time");
+
         $form = new CreateTimeForm();
 
         if ($this->request->isPost()) {
@@ -276,7 +283,7 @@ class TimesController extends ControllerBase
      */
     public function deleteAction($id)
     {
-
+        $this->tag->appendTitle(" - Delete Time");
         $time = Times::findFirstByid($id);
 
         self::checkTime($time);
@@ -306,6 +313,8 @@ class TimesController extends ControllerBase
 
     public function summaryAction()
     {
+        $this->tag->appendTitle(" - Summary");
+
         $id = $this->auth->getId();
         $times = Times::find("user_id = $id");
         $output = array();

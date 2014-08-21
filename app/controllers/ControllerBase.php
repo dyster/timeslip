@@ -7,6 +7,7 @@ class ControllerBase extends Controller
 {
     public function beforeExecuteRoute(Dispatcher $dispatcher)
     {
+        $this->tag->setTitle("Timeslip");
 
         $controller = $dispatcher->getControllerName();
         $action = $dispatcher->getActionName();
