@@ -39,6 +39,18 @@ class Times extends \Phalcon\Mvc\Model
      */
     protected $project_id;
 
+    protected $startLat;
+
+    protected $startLng;
+
+    protected $startTimeZone;
+
+    protected $endLat;
+
+    protected $endLng;
+
+    protected $endTimeZone;
+
     /**
      * Method to set the value of field start
      *
@@ -102,6 +114,33 @@ class Times extends \Phalcon\Mvc\Model
         $this->project_id = $project_id;
 
         return $this;
+    }
+
+    public function setStartLocation($location)
+    {
+        if($location == null) {
+            $this->startLat = 0;
+            $this->startLng = 0;
+            $this->startTimeZone = "";
+        } else {
+            $this->startLat = $location["latitude"];
+            $this->startLng = $location["longitude"];
+            $this->startTimeZone = $location["timezone"];
+        }
+    }
+
+    public function setEndLocation($location)
+    {
+        if($location == null) {
+            $this->endLat = 0;
+            $this->endLng = 0;
+            $this->endTimeZone = "";
+        } else {
+            $this->endLat = $location["latitude"];
+            $this->endLng = $location["longitude"];
+            $this->endTimeZone = $location["timezone"];
+        }
+
     }
 
     /**
@@ -184,7 +223,8 @@ class Times extends \Phalcon\Mvc\Model
     {
         $this->belongsTo("user_id", "Users", "id", NULL);
         $this->belongsTo("project_id", "Projects", "id", NULL);
-        //$this->skipAttributesOnCreate(array('end', 'project_id'));
+        $this->skipAttributesOnCreate(array('endTimeZone', 'endLatitude', 'endLongitude'));
     }
-
 }
+
+

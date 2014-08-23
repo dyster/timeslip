@@ -5,7 +5,10 @@
 if($state == 'running') {
 
 echo $this->tag->form();
-echo $this->tag->hiddenField(array('action', 'value' => 'stop')); ?>
+echo $this->tag->hiddenField(array('action', 'value' => 'stop'));
+echo $this->tag->hiddenField(array('lat', 'value' => ''));
+echo $this->tag->hiddenField(array('lng', 'value' => ''));
+?>
 <div class="input-group">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">Stop</button>
@@ -16,15 +19,21 @@ echo $this->tag->hiddenField(array('action', 'value' => 'stop')); ?>
 </form>
 <?php } ?>
 
-<?php echo $this->tag->form();?>
-<?php echo $this->tag->hiddenField(array('action', 'value' => 'start')); ?>
+<?php echo $this->tag->form();
+echo $this->tag->hiddenField(array('action', 'value' => 'start'));
+echo $this->tag->hiddenField(array('lat', 'value' => ''));
+echo $this->tag->hiddenField(array('lng', 'value' => ''));
+?>
 <div class="input-group">
         <span class="input-group-btn">
             <button class="btn btn-default" type="submit">Start</button>
         </span>
     <?php echo $this->tag->textField(array('tempnote', 'class' => 'form-control'));?>
 </div>
+<p class="help-block" id="location" style="display: none;"></p>
 </form>
+
+
 
 <?php if(!empty($recents)) { ?>
     <h3>Recent</h3>
@@ -37,9 +46,53 @@ echo $this->tag->hiddenField(array('action', 'value' => 'stop')); ?>
                 <?php echo $this->tag->form();?>
                 <?php echo $this->tag->hiddenField(array('action', 'value' => 'start')); ?>
                 <?php echo $this->tag->hiddenField(array('tempnote', 'value' => $recent->tempnote)); ?>
+                <?php echo $this->tag->hiddenField(array('lat', 'value' => '')); ?>
+                <?php echo $this->tag->hiddenField(array('lng', 'value' => '')); ?>
                 <button class="btn btn-default btn-block" type="submit"><?php echo $recent->tempnote;?></button>
                 </form>
             </div>
         <?php } ?>
         </div>
     <?php } ?>
+
+<script>
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(getPosition);
+    }
+
+    function getPosition(position) {
+        var x = document.getElementsByName('lat');
+        var y = document.getElementsByName('lng');
+        var loc = document.getElementById('location');
+
+        for (index = 0; index < x.length; ++index) {
+            x[index].setAttribute('value', position.coords.latitude.toString())
+        }
+        for (index = 0; index < y.length; ++index) {
+            y[index].setAttribute('value', position.coords.longitude.toString())
+        }
+        loc.innerHTML = "Location: " + position.coords.latitude + " " + position.coords.longitude + " <a target='_blank' href='https://www.google.com/maps/search/"+position.coords.latitude+","+position.coords.longitude+"'>Show on map</a>";
+        loc.style.display = 'inherit';
+
+        var req = new XMLHttpRequest();
+        req.onreadystatechange  = function(){
+            if (req.readyState == 4  )
+            {
+                // Javascript function JSON.parse to parse JSON data
+                //var jsonObj = JSON.parse(http_request.responseText);
+
+                // jsonObj variable now contains the data structure and can
+                // be accessed as jsonObj.name and jsonObj.country.
+                //document.getElementById("Name").innerHTML =  jsonObj.name;
+                //document.getElementById("Country").innerHTML = jsonObj.country;
+                loc.innerHTML = "Location: " + req.responseText  + " <a target='_blank' href='https://www.google.com/maps/search/"+position.coords.latitude+","+position.coords.longitude+"'>Show on map</a>";
+            }
+        }
+        req.open("GET", "getGoogleLocation/"+position.coords.latitude+"/"+position.coords.longitude, true);
+        req.send();
+
+
+
+
+    }
+</script>

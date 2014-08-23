@@ -16,10 +16,14 @@ class TimesController extends ControllerBase
         $identity = $this->auth->getIdentity();
 
         if($this->request->isPost()) {
+
+            $location = self::getTimeZone($this->request->getPost('lat'), $this->request->getPost('lng'));
+
             $halftime = Times::findFirst('end IS NULL');
 
             if($halftime !== false) {
                 $halftime->setEnd(date(DATE_ATOM));
+                $halftime->setEndLocation($location);
                 if (!$halftime->save()) {
                     foreach ($halftime->getMessages() as $message) {
                         $this->flash->error($message);
@@ -33,7 +37,9 @@ class TimesController extends ControllerBase
                 $time->setUserId($identity['id']);
                 $time->setTempnote($this->request->getPost("tempnote"));
                 $time->setEnd('0000-00-00 00:00:00');
+                $time->setEndLocation(null);
                 $time->setProjectId(0);
+                $time->setStartLocation($location);
                 if (!$time->save()) {
                     foreach ($time->getMessages() as $message) {
                         $this->flash->error($message);
@@ -64,6 +70,39 @@ class TimesController extends ControllerBase
             $state = 'running';
 
         $this->view->setVars(compact('recents', 'state', 'halftime'));
+    }
+
+    private function getTimeZone($latitude, $longitude)
+    {
+        $location = array();
+        $googleapi = "AIzaSyA592ILmdLBk32xtzTyWaUPN1P_6tOuUYw";
+
+        $timestamp = time();
+        //$arr = json_decode(file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$googleapi&result_type=postal_town&location_type=APPROXIMATE"));
+        //$status = $arr->status;
+        //if($status == "OK") {
+        //    print_r($arr->results[0]->address_components);
+        //}
+
+        $timezonearr = json_decode(file_get_contents("https://maps.googleapis.com/maps/api/timezone/json?location=$latitude,$longitude&timestamp=$timestamp&key=$googleapi"));
+        $location["timezone"] = $timezonearr->timeZoneId;
+        //$offset = $timezonearr->dstOffset + $timezonearr->rawOffset;
+        $location["latitude"] = $latitude;
+        $location["longitude"] = $longitude;
+        return $location;
+    }
+
+    public function getGoogleLocationAction($latitude, $longitude)
+    {
+        $this->view->disable();
+        $googleapi = "AIzaSyA592ILmdLBk32xtzTyWaUPN1P_6tOuUYw";
+        $arr = json_decode(file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$googleapi&result_type=postal_town&location_type=APPROXIMATE"));
+        $status = $arr->status;
+        if($status == "OK") {
+            echo $arr->results[0]->address_components[0]->short_name;
+        }
+        else
+            print_r($status);
     }
 
     public function categoriseAction()
