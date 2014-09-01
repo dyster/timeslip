@@ -92,6 +92,20 @@ class CreateTimeForm extends Form
         $projectid->addValidator(new PresenceOf(array('message' => 'Project is required')));
         $this->add($projectid);
 
+        $location1 = new Text('location1', array(
+            'placeholder' => 'Type location and choose in dropdown',
+            'class' => 'form-control'
+        ));
+        $location1->setAttribute('onkeyup', 'getCoords(this.value)');
+        $location1->setLabel('Location');
+        $this->add($location1);
+
+        $location2 = new \Phalcon\Forms\Element\Select('location2', array());
+
+        $location2->setAttribute('class', 'form-control');
+
+        $this->add($location2);
+
         // CSRF
         $csrf = new Hidden('csrf');
 

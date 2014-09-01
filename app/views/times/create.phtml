@@ -33,8 +33,41 @@
     <?php echo $this->view->form->render('project_id'); ?>
 </div>
 <div class="form-group">
+    <?php echo $this->view->form->label('location1'); ?>
+    <?php echo $this->view->form->render('location1'); ?>
+    <?php echo $this->view->form->render('location2'); ?>
+</div>
+<div class="form-group">
     <?php echo $this->view->form->render('Add'); ?>
     <?php echo $this->view->form->render('csrf'); ?>
 </div>
 
+
 </form>
+
+<script type="text/javascript">
+
+    function getCoords(str) {
+        if(str.length > 1) {
+            var selector = document.getElementById('location2');
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange  = function(){
+                if (req.readyState == 4  )
+                {
+                    var array = JSON.parse(req.responseText);
+
+                    selector.options.length = 0;
+                    for (var i=0; i<array.length; i++){
+                        selector.options[i]=new Option(array[i][0], array[i][1] + " " + array[i][2], false, false);
+                    }
+
+
+                }
+            };
+            req.open("GET", "getGoogleCoords/"+str, true);
+            req.send();
+        }
+
+    }
+</script>

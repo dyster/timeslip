@@ -105,6 +105,23 @@ class TimesController extends ControllerBase
             print_r($status);
     }
 
+    public function getGoogleCoordsAction($addr)
+    {
+        $this->view->disable();
+        $googleapi = "AIzaSyA592ILmdLBk32xtzTyWaUPN1P_6tOuUYw";
+        $arr = json_decode(file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=$addr&key=$googleapi"));
+        $status = $arr->status;
+        if($status == "OK") {
+            foreach($arr->results as $result){
+                $out[] = array($result->formatted_address, $result->geometry->location->lat, $result->geometry->location->lng);
+                //echo "\n".$result->formatted_address . " " . $result->geometry->location->lat . " " . $result->geometry->location->lng;
+            }
+            echo json_encode($out);
+        }
+        else
+            print_r($status);
+    }
+
     public function categoriseAction()
     {
         $this->tag->appendTitle(" - Categorise");
