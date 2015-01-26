@@ -185,10 +185,8 @@ class TimesController extends ControllerBase
                 "page" => $currentPage
             )
         );
-        $page = $paginator->getPaginate();
 
-        $this->view->weeks = $output;
-        $this->view->page = $page;
+        $this->view->page = $paginator->getPaginate();
     }
 
     /**
