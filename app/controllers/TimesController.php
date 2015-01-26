@@ -391,27 +391,37 @@ class TimesController extends ControllerBase
 
             $dur = $time->getDuration();
 
-            if(empty($output[$year][$week]))
-                $output[$year][$week] = array('total' => 0, 'days' => array(), 'projects' => array());
+            if(empty($output["$year - Week $week"]))
+                $output["$year - Week $week"] = array('total' => 0, 'days' => array(), 'projects' => array());
 
-            if(empty($output[$year][$week]['projects'][$time->getTempnote()]))
-                $output[$year][$week]['projects'][$time->getTempnote()] = 0;
+            if(empty($output["$year - Week $week"]['projects'][$time->getTempnote()]))
+                $output["$year - Week $week"]['projects'][$time->getTempnote()] = 0;
 
-            if(empty($output[$year][$week]['days'][$day]))
-                $output[$year][$week]['days'][$day] = array('total' => 0, 'projects' => array());
+            if(empty($output["$year - Week $week"]['days'][$day]))
+                $output["$year - Week $week"]['days'][$day] = array('total' => 0, 'projects' => array());
 
-            if(empty($output[$year][$week]['days'][$day]['projects'][$time->getTempnote()]))
-                $output[$year][$week]['days'][$day]['projects'][$time->getTempnote()] = 0;
+            if(empty($output["$year - Week $week"]['days'][$day]['projects'][$time->getTempnote()]))
+                $output["$year - Week $week"]['days'][$day]['projects'][$time->getTempnote()] = 0;
 
 
 
-            $output[$year][$week]['total'] += $dur;
-            $output[$year][$week]['days'][$day]['total'] += $dur;
-            $output[$year][$week]['days'][$day]['projects'][$time->getTempnote()] += $time->getDuration();
-            $output[$year][$week]['projects'][$time->getTempnote()] += $time->getDuration();
+            $output["$year - Week $week"]['total'] += $dur;
+            $output["$year - Week $week"]['days'][$day]['total'] += $dur;
+            $output["$year - Week $week"]['days'][$day]['projects'][$time->getTempnote()] += $time->getDuration();
+            $output["$year - Week $week"]['projects'][$time->getTempnote()] += $time->getDuration();
         }
 
-        $this->view->output = $output;
+        $currentPage = $this->request->getQuery('page', 'int');
+
+        $paginator = new Paginator(
+            array(
+                "data" => $output,
+                "limit"=> 5,
+                "page" => $currentPage
+            )
+        );
+
+        $this->view->page = $paginator->getPaginate();
     }
 
 }

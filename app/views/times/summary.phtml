@@ -1,10 +1,11 @@
 <?php echo $this->getContent(); ?>
 
-<?php foreach($output as $year => $weeks) { ?>
-<div class="container-fluid">
-        <?php foreach($weeks as $week => $weekarr) { ?>
+<?php echo $this->elements->getPaginator($page); ?>
+
+
+        <?php foreach($page->items as $week => $weekarr) { ?>
             <div class="panel panel-primary">
-                <div class="panel-heading"><?php echo "$year Week " . $week . " - <strong>" . round($weekarr['total']/3600) . "h</strong>"; ?></div>
+                <div class="panel-heading"><?php echo $week . " - <strong>" . round($weekarr['total']/3600) . "h</strong>"; ?></div>
                 <div class="panel-body">
                     <ul>
                         <?php foreach($weekarr['projects'] as $name => $sum) { ?>
@@ -29,5 +30,6 @@
                 </table>
             </div>
         <?php } ?>
-</div>
-<?php } ?>
+
+
+<?php echo $this->elements->getPaginator($page); ?>
