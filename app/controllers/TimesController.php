@@ -181,7 +181,7 @@ class TimesController extends ControllerBase
         $paginator = new Paginator(
             array(
                 "data" => $output,
-                "limit"=> 5,
+                "limit"=> 10,
                 "page" => $currentPage
             )
         );
@@ -416,7 +416,7 @@ class TimesController extends ControllerBase
         $paginator = new Paginator(
             array(
                 "data" => $output,
-                "limit"=> 5,
+                "limit"=> 10,
                 "page" => $currentPage
             )
         );
