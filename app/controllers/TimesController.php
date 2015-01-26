@@ -1,7 +1,7 @@
 <?php
 
 use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model as Paginator;
+use Phalcon\Paginator\Adapter\NativeArray as Paginator;
 
 class TimesController extends ControllerBase
 {
@@ -167,6 +167,7 @@ class TimesController extends ControllerBase
                 "project_id = $param AND user_id = ".$this->auth->getId()
             ));
         }
+
         $output = array();
         foreach($times as $time) {
             $week = date('W', strtotime($time->getStart()));
@@ -175,8 +176,19 @@ class TimesController extends ControllerBase
             $output["$year - Week $week"][$day][] = $time;
         }
 
-        $this->view->weeks = $output;
+        $currentPage = $this->request->getQuery('page', 'int');
 
+        $paginator = new Paginator(
+            array(
+                "data" => $output,
+                "limit"=> 5,
+                "page" => $currentPage
+            )
+        );
+        $page = $paginator->getPaginate();
+
+        $this->view->weeks = $output;
+        $this->view->page = $page;
     }
 
     /**
