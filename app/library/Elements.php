@@ -140,7 +140,7 @@ class Elements extends Phalcon\Mvc\User\Component
     public function getPaginator($page)
     {   ?>
         <nav>
-            <ul class="pagination">
+            <ul class="pagination pagination-sm">
                 <li<?php if($page->current == 1) echo ' class="disabled"'; ?>>
                     <?php echo Phalcon\Tag::linkTo(array("times/listify?page=" . $page->before, "<span aria-hidden=\"true\">&laquo;</span>", 'aria-label' => 'Previous')); ?>
                 </li>
