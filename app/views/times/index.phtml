@@ -9,13 +9,10 @@ echo $this->tag->hiddenField(array('action', 'value' => 'stop'));
 echo $this->tag->hiddenField(array('lat', 'value' => ''));
 echo $this->tag->hiddenField(array('lng', 'value' => ''));
 ?>
-<div class="input-group">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">Stop</button>
-                </span>
-    <input class="form-control" placeholder="Started <?php echo $halftime->getStart();?>"></input>
-
-</div><br />
+    <div class="form-group">
+        <button class="btn btn-default" type="submit">Stop</button>
+        <span id="helpBlock1" class="help-block">"<?php echo $halftime->getTempnote();?>" started <?php echo $halftime->getStart();?></span>
+    </div>
 </form>
 <?php } ?>
 
@@ -30,7 +27,7 @@ echo $this->tag->hiddenField(array('lng', 'value' => ''));
         </span>
     <?php echo $this->tag->textField(array('tempnote', 'class' => 'form-control'));?>
 </div>
-<p class="help-block" id="location" style="display: none;"></p>
+<span id="location" class="help-block" style="display: none;"></span>
 </form>
 
 
@@ -88,7 +85,7 @@ echo $this->tag->hiddenField(array('lng', 'value' => ''));
                 loc.innerHTML = "Location: " + req.responseText  + " <a target='_blank' href='https://www.google.com/maps/search/"+position.coords.latitude+","+position.coords.longitude+"'>Show on map</a>";
             }
         }
-        req.open("GET", "getGoogleLocation/"+position.coords.latitude+"/"+position.coords.longitude, true);
+        req.open("GET", "<?php echo $this->url->get("times/getGoogleLocation/"); ?>"+position.coords.latitude+"/"+position.coords.longitude, true);
         req.send();
     }
 </script>
