@@ -138,21 +138,24 @@ class Elements extends Phalcon\Mvc\User\Component
     }
 
     public function getPaginator($page)
-    {   ?>
+    {
+        $controllerName = $this->view->getControllerName();
+        $actionName = $this->view->getActionName();
+        ?>
         <nav>
             <ul class="pagination pagination-sm">
                 <li<?php if($page->current == 1) echo ' class="disabled"'; ?>>
-                    <?php echo Phalcon\Tag::linkTo(array("times/listify?page=" . $page->before, "<span aria-hidden=\"true\">&laquo;</span>", 'aria-label' => 'Previous')); ?>
+                    <?php echo Phalcon\Tag::linkTo(array("$controllerName/$actionName?page=" . $page->before, "<span aria-hidden=\"true\">&laquo;</span>", 'aria-label' => 'Previous')); ?>
                 </li>
 
                 <?php for($i=1;$i<=$page->total_pages;$i++) {?>
                     <li<?php if($i == $page->current) echo ' class="active"'; ?>>
-                        <?php echo Phalcon\Tag::linkTo(array("times/listify?page=" . $i, $i)); ?>
+                        <?php echo Phalcon\Tag::linkTo(array("$controllerName/$actionName?page=" . $i, $i)); ?>
                     </li>
                 <?php } ?>
 
                 <li<?php if($page->current == $page->total_pages) echo ' class="disabled"'; ?>>
-                    <?php echo Phalcon\Tag::linkTo(array("times/listify?page=" . $page->next, "<span aria-hidden=\"true\">&raquo;</span>", 'aria-label' => 'Next')); ?>
+                    <?php echo Phalcon\Tag::linkTo(array("$controllerName/$actionName?page=" . $page->next, "<span aria-hidden=\"true\">&raquo;</span>", 'aria-label' => 'Next')); ?>
                 </li>
 
             </ul>
